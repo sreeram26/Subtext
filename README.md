@@ -1,2 +1,2 @@
-# Subtext
-Personal Assistant using Golang
+# mankathada
+Go Lang code for Personal Assistant
