@@ -1,7 +1,9 @@
 package main
 
 import (
-	"github.com/peterbourgon/diskv"
+	"fmt"
+	"github.com/patrickmn/go-cache"
+	"time"
 	"bufio"
     "log"
 	"strings"
@@ -9,15 +11,8 @@ import (
 )
 
 func main() {
-	// Simplest transform function: put all the data files into the base dir.
-	flatTransform := func(s string) []string { return []string{} }
 
-	// Initialize a new diskv store, rooted at "my-data-dir", with a 1MB cache.
-	d := diskv.New(diskv.Options{
-		BasePath:     "my-data-dir",
-		Transform:    flatTransform,
-		CacheSizeMax: 100 * 1024 * 1024,
-	})
+	c := cache.New(5*time.Hour, 10*time.Hour)
 
 	file, err := os.Open("data/only_tamil_uniq_sorted_words.txt")
     if err != nil {
@@ -27,10 +22,11 @@ func main() {
 
     scanner := bufio.NewScanner(file)
     for scanner.Scan() {
-		d.Write(strings.TrimSpace(scanner.Text()), []byte{'1'})
+		c.Set(strings.TrimSpace(scanner.Text()), true, cache.NoExpiration)
     }
 
     if err := scanner.Err(); err != nil {
         log.Fatal(err)
     }
+	fmt.Println(len(c.Items()))
 }

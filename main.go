@@ -16,5 +16,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/transliterate", transliterate.HandleTransliterateQuery)
+	http.HandleFunc("/silakki", transliterate.HandleSilakkiDumma)
+	http.HandleFunc("/question", transliterate.HandleQuestions)
 	http.ListenAndServe(":8080", nil)
 }
