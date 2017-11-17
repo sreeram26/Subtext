@@ -1,1 +1,4 @@
 config/My*
+data/*.txt
+src/github.com
+my-data-dir
